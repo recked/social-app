@@ -22,6 +22,10 @@ import {EventStopper} from '#/view/com/util/EventStopper'
 import * as Toast from '#/view/com/util/Toast'
 import {Button, ButtonIcon} from '#/components/Button'
 import {ArrowOutOfBox_Stroke2_Corner0_Rounded as Share} from '#/components/icons/ArrowOutOfBox'
+import {
+  Bell_Filled_Corner0_Rounded as Unnotify,
+  Bell_Stroke2_Corner0_Rounded as Notify,
+} from '#/components/icons/Bell'
 import {DotGrid_Stroke2_Corner0_Rounded as Ellipsis} from '#/components/icons/DotGrid'
 import {Flag_Stroke2_Corner0_Rounded as Flag} from '#/components/icons/Flag'
 import {ListSparkle_Stroke2_Corner0_Rounded as List} from '#/components/icons/ListSparkle'
@@ -90,6 +94,10 @@ let ProfileMenu = ({
       onRemove: invalidateProfileQuery,
     })
   }, [profile, openModal, invalidateProfileQuery])
+
+  const onPressAccountNotification = React.useCallback(() => {
+    Toast.show(_(msg`Notifications on`))
+  }, [_])
 
   const onPressMuteAccount = React.useCallback(async () => {
     if (profile.viewer?.muted) {
@@ -251,25 +259,46 @@ let ProfileMenu = ({
                   <>
                     {!profile.viewer?.blocking &&
                       !profile.viewer?.mutedByList && (
-                        <Menu.Item
-                          testID="profileHeaderDropdownMuteBtn"
-                          label={
-                            profile.viewer?.muted
-                              ? _(msg`Unmute Account`)
-                              : _(msg`Mute Account`)
-                          }
-                          onPress={onPressMuteAccount}>
-                          <Menu.ItemText>
-                            {profile.viewer?.muted ? (
-                              <Trans>Unmute Account</Trans>
-                            ) : (
-                              <Trans>Mute Account</Trans>
-                            )}
-                          </Menu.ItemText>
-                          <Menu.ItemIcon
-                            icon={profile.viewer?.muted ? Unmute : Mute}
-                          />
-                        </Menu.Item>
+                        <>
+                          <Menu.Item
+                            testID="profileHeaderDropdownNotificationsBtn"
+                            label={
+                              profile.viewer?.muted
+                                ? _(msg`Turn on notifications`)
+                                : _(msg`Turn off notifications`)
+                            }
+                            onPress={onPressAccountNotification}>
+                            <Menu.ItemText>
+                              {profile.viewer?.muted ? (
+                                <Trans>Turn Off Notifications</Trans>
+                              ) : (
+                                <Trans>Turn On Notifications</Trans>
+                              )}
+                            </Menu.ItemText>
+                            <Menu.ItemIcon
+                              icon={profile.viewer?.muted ? Unnotify : Notify}
+                            />
+                          </Menu.Item>
+                          <Menu.Item
+                            testID="profileHeaderDropdownMuteBtn"
+                            label={
+                              profile.viewer?.muted
+                                ? _(msg`Unmute Account`)
+                                : _(msg`Mute Account`)
+                            }
+                            onPress={onPressMuteAccount}>
+                            <Menu.ItemText>
+                              {profile.viewer?.muted ? (
+                                <Trans>Unmute Account</Trans>
+                              ) : (
+                                <Trans>Mute Account</Trans>
+                              )}
+                            </Menu.ItemText>
+                            <Menu.ItemIcon
+                              icon={profile.viewer?.muted ? Unmute : Mute}
+                            />
+                          </Menu.Item>
+                        </>
                       )}
                     {!profile.viewer?.blockingByList && (
                       <Menu.Item
